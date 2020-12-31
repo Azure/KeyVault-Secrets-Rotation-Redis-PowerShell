@@ -252,7 +252,7 @@
             
                             "type": "Microsoft.Cache/Redis/providers/roleAssignments",
                             "apiVersion": "2018-09-01-preview",
-                            "name": "[concat(parameters('RedisName'), '/Microsoft.Authorization/', guid(uniqueString(parameters('RedisName'))))]",
+                            "name": "[concat(parameters('RedisName'), '/Microsoft.Authorization/', guid(concat(parameters('RedisName'),reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'2019-08-01', 'Full').identity.principalId)))]",
                             "dependsOn": [
                                 
                             ],
