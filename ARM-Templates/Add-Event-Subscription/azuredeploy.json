@@ -96,9 +96,7 @@
                             "apiVersion": "2019-10-01",
                             "subscriptionId": "[subscription().subscriptionId]",
                             "resourceGroup": "[parameters('RedisRG')]",
-                            "dependsOn": [
-                                "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
-                            ],
+                            "dependsOn": [],
                             "properties": {
                                 "mode": "Incremental",
                                 "template": {
