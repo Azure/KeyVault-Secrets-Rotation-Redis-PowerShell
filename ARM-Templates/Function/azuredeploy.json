@@ -254,7 +254,7 @@
                             "apiVersion": "2018-09-01-preview",
                             "name": "[concat(parameters('RedisName'), '/Microsoft.Authorization/', guid(uniqueString(parameters('RedisName'))))]",
                             "dependsOn": [
-                                "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+                                
                             ],
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'e0f68234-74aa-48ed-b826-c38b57376e17')]",
