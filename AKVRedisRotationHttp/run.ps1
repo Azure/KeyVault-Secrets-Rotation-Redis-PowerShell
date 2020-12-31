@@ -6,40 +6,26 @@ param($Request, $TriggerMetadata)
 function RegenerateCredential($credentialId, $providerAddress){
     Write-Host "Regenerating credential. Id: $credentialId Resource Id: $providerAddress"
     
-    #Write code to regenerate credential, update your service with new credential and return it
-
-    #EXAMPLE FOR STORAGE
-
-    <#  
-    $storageAccountName = ($providerAddress -split '/')[8]
+    $redisName = ($providerAddress -split '/')[8]
     $resourceGroupName = ($providerAddress -split '/')[4]
     
     #Regenerate key 
-    New-AzStorageAccountKey -ResourceGroupName $resourceGroupName -Name $storageAccountName -KeyName $credentialId
-    $newCredentialValue = (Get-AzStorageAccountKey -ResourceGroupName $resourceGroupName -AccountName $storageAccountName|where KeyName -eq $credentialId).value 
-    return $newCredentialValue
-    
-    #>
+    $newKeyValue = (New-AzRedisCacheKey -Name $redisName -ResourceGroupName $resourceGroupName -KeyType $credentialId -Force)."$($credentialId)Key"
+    return $newKeyValue
 }
 
 function GetAlternateCredentialId($credentialId){
-    #Write code to get alternate credential id for your service
-
-   #EXAMPLE FOR STORAGE
-
-   <#
-   $validCredentialIdsRegEx = 'key[1-2]'
-   
-   If($credentialId -NotMatch $validCredentialIdsRegEx){
-       throw "Invalid credential id: $credentialId. Credential id must follow this pattern:$validCredentialIdsRegEx"
-   }
-   If($credentialId -eq 'key1'){
-       return "key2"
-   }
-   Else{
-       return "key1"
-   }
-   #>
+    $validCredentialIdsRegEx = 'Primary|Secondary'
+    
+    If($credentialId -NotMatch $validCredentialIdsRegEx){
+        throw "Invalid credential id: $credentialId. Credential id must follow this pattern:$validCredentialIdsRegEx"
+    }
+    If($credentialId -eq 'Primary'){
+        return "Secondary"
+    }
+    Else{
+        return "Primary"
+    }
 }
 
 function AddSecretToKeyVault($keyVAultName,$secretName,$secretvalue,$exprityDate,$tags){

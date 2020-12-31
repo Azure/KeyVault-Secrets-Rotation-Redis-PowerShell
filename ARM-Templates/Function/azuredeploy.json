@@ -2,18 +2,18 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-          "[ServiceType]RG": {
+          "RedisRG": {
             "defaultValue": "[resourceGroup().name]",
             "type": "String",
             "metadata": {
-                "description": "The name of the resource group where [ServiceType] with keys to rotate has deployed."
+                "description": "The name of the resource group where Redis with keys to rotate has deployed."
             }
         },
-        "[ServiceType]Name": {
+        "RedisName": {
             "defaultValue": "",
             "type": "String",
             "metadata": {
-                "description": "The name of the [ServiceType] with keys to rotate."
+                "description": "The name of the Redis with keys to rotate."
             }
         },
         "keyVaultRG": {
@@ -42,21 +42,21 @@
 			}
 		},
         "functionAppName": {
-            "defaultValue": "[concat(resourceGroup().name, '-[ServiceType]-rotation-fnapp')]",
+            "defaultValue": "[concat(resourceGroup().name, '-Redis-rotation-fnapp')]",
             "type": "String",
             "metadata": {
                 "description": "The name of the function app that you wish to create."
             }
         },
         "secretName": {
-            "defaultValue": "[ServiceType]Key",
+            "defaultValue": "RedisKey",
             "type": "String",
             "metadata": {
-                "description": "The name of the secret where [ServiceType] keys are stored."
+                "description": "The name of the secret where Redis keys are stored."
             }
         },
         "repoURL": {
-            "defaultValue": "<address to github repo i.e. https://github.com/Azure-Samples/KeyVault-Rotation-StorageAccountKey-PowerShell.git>",
+            "defaultValue": "https://github.com/Azure/KeyVault-Rotation-Redis-PowerShell.git",
             "type": "String",
             "metadata": {
                 "description": "The URL for the GitHub repository that contains the project to deploy."
@@ -83,13 +83,13 @@
         {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
-            "name": "[concat(resourceGroup().name, '-[ServiceType]-rotation-fnapp-plan')]",
+            "name": "[concat(resourceGroup().name, '-Redis-rotation-fnapp-plan')]",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "[variables('appServiceSKU')]"
             },
             "properties": {
-                "name": "[concat(resourceGroup().name, '-[ServiceType]-rotation-fnapp-plan')]"
+                "name": "[concat(resourceGroup().name, '-Redis-rotation-fnapp-plan')]"
                
             }
         },
@@ -218,7 +218,7 @@
                                     "properties": {
                                         "maxEventsPerBatch": 1,
                                         "preferredBatchSizeInKilobytes": 64,
-                                        "resourceId": "[concat(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'/functions/AKV[ServiceType]Rotation')]"
+                                        "resourceId": "[concat(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'/functions/AKVRedisRotation')]"
                                     }
                                 },
                                 "filter": {
@@ -234,35 +234,36 @@
             }
         },
         {
-
-            //EXAMPLE OF GRANTING ACCESS TO STORAGE
-
-            // "name": "storage-grant-access",
-            // "type": "Microsoft.Resources/deployments",
-            // "apiVersion": "2019-10-01",
-            // "subscriptionId": "[subscription().subscriptionId]",
-            // "resourceGroup": "[parameters('storageAccountRG')]",
-            // "dependsOn": [
-            //     "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
-            // ],
-            // "properties": {
-            //     "mode": "Incremental",
-            //     "template": {
-            //         "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-            //         "contentVersion": "1.0.0.0",
-            //         "resources": [
-            //             {
-            //                 "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
-            //                 "apiVersion": "2018-09-01-preview",
-            //                 "name": "[concat(parameters('storageAccountName'), '/Microsoft.Authorization/', guid(concat(parameters('storageAccountName'),reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'2019-08-01', 'Full').identity.principalId)))]",
-            //                 "properties": {
-            //                     "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '81a9662b-bebf-436f-a333-f67b29880f12')]",
-            //                     "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'2019-08-01', 'Full').identity.principalId]"
-            //                 }
-            //             }
-            //         ]
-            //     }
-            // }
+            "name": "grant-access",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "subscriptionId": "[subscription().subscriptionId]",
+            "resourceGroup": "[parameters('RedisRG')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+            
+                            "type": "Microsoft.Cache/Redis/providers/roleAssignments",
+                            "apiVersion": "2018-09-01-preview",
+                            "name": "[concat(parameters('RedisName'), '/Microsoft.Authorization/', guid(uniqueString(parameters('RedisName'))))]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
+                            ],
+                            "properties": {
+                                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'e0f68234-74aa-48ed-b826-c38b57376e17')]",
+                                "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')),'2019-08-01', 'Full').identity.principalId]"
+                            }
+                        }
+                    ]
+                }
+            }
         }
     ]
 }

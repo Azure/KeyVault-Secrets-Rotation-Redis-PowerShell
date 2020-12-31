@@ -1,35 +1,35 @@
-# [ServiceType] keys rotation ARM templates
+# Redis keys rotation ARM templates
 
-This template creates below components to help demonstrate [ServiceType] keys rotation in Key Vault using Function and Event Grid notification.
+This template creates below components to help demonstrate Redis keys rotation in Key Vault using Function and Event Grid notification.
 
-### [ServiceType] keys rotation functions ARM template:
+### Redis keys rotation functions ARM template:
 
 Components:
 
 - App Service Plan
-- Function App with access to Key Vault and [ServiceType] 
-- Functions to rotate [ServiceType] keys
+- Function App with access to Key Vault and Redis 
+- Functions to rotate Redis keys
 - Event Subscription
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2FKeyVault-Rotation-StorageAccountKey-PowerShell%2Fmain%2FARM-Templates%2FFunction%2Fazuredeploy.json>" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FFunction%2Fazuredeploy.json>" target="_blank">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.png"/>
 </a>
-<a href="http://armviz.io/#/?load=<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2FKeyVault-Rotation-StorageAccountKey-PowerShell%2Fmain%2FARM-Templates%2FFunction%2Fazuredeploy.json>" target="_blank">
+<a href="http://armviz.io/#/?load=<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FFunction%2Fazuredeploy.json>" target="_blank">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.png"/>
 </a>
 
-### Event subscription for existing [ServiceType] keys rotation function ARM template
+### Event subscription for existing Redis keys rotation function ARM template
 
 Components:
 
 - Event Subscription
-- Access for Function to access [ServiceType] keys
+- Access for Function to access Redis keys
 
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2FKeyVault-Rotation-StorageAccountKey-PowerShell%2Fmain%2FARM-Templates%2FAdd-Event-Subscription%2Fazuredeploy.json>" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FAdd-Event-Subscription%2Fazuredeploy.json" target="_blank">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.png"/>
 </a>
-<a href="http://armviz.io/#/?load=<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2FKeyVault-Rotation-StorageAccountKey-PowerShell%2Fmain%2FARM-Templates%2FAdd-Event-Subscription%2Fazuredeploy.json>" target="_blank">
+<a href="http://armviz.io/#/?load=<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FAdd-Event-Subscription%2Fazuredeploy.json>" target="_blank">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.png"/>
 </a>
 
