@@ -51,7 +51,7 @@ function RoatateSecret($keyVaultName,$secretName){
     Write-Host "Alternate credential id: $alternateCredentialId"
 
     #Regenerate alternate access credential in provider
-    $newCredentialValue = (RegenerateCredential $alternateCredentialId $providerAddress)[-1]
+    $newCredentialValue = (RegenerateCredential $alternateCredentialId $providerAddress)
     Write-Host "Credential regenerated. Credential Id: $alternateCredentialId Resource Id: $providerAddress"
 
     #Add new credential to Key Vault
