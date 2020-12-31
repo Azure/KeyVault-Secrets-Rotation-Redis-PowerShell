@@ -11,10 +11,10 @@ Components:
 - Functions to rotate Redis keys
 - Event Subscription
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FFunction%2Fazuredeploy.json>" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FFunction%2Fazuredeploy.json" target="_blank">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.png"/>
 </a>
-<a href="http://armviz.io/#/?load=<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FFunction%2Fazuredeploy.json>" target="_blank">
+<a href="http://armviz.io/#/?load=<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FFunction%2Fazuredeploy.json" target="_blank">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.png"/>
 </a>
 
@@ -29,7 +29,7 @@ Components:
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FAdd-Event-Subscription%2Fazuredeploy.json" target="_blank">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.png"/>
 </a>
-<a href="http://armviz.io/#/?load=<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FAdd-Event-Subscription%2Fazuredeploy.json>" target="_blank">
+<a href="http://armviz.io/#/?load=<link to raw azuredeploy.json i.e. https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2FKeyVault-Rotation-Redis-PowerShell%2Fmain%2FARM-Templates%2FAdd-Event-Subscription%2Fazuredeploy.json" target="_blank">
     <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.png"/>
 </a>
 
