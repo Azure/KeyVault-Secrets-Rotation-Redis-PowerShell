@@ -73,7 +73,7 @@
     },
     "resources": [
         {
-            "name": "kv-event-subscription",
+            "name": "kv-event-subscription-and-secret-deployment",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "subscriptionId": "[subscription().subscriptionId]",
@@ -112,7 +112,26 @@
                             }
                         },
                         {
-                            "name": "grant-access-and-secret-deployment",
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "apiVersion": "2019-09-01",
+                            "condition": "[parameters('deploySecretWithStorageAccountKeyToKeyVault')]",
+                            "name": "[concat(parameters('keyVaultName'), '/', parameters('secretName'))]",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [],
+                            "tags": {
+                                "ValidityPeriodDays":"[parameters('secretValidityPeriodDays')]",
+                                "CredentialId":"key1",
+                                "ProviderAddress":"[variables('ProviderResourceId')]"
+                            },
+                            "properties": {
+                                "value": "[listKeys(variables('ProviderResourceId'), '2020-06-01').primaryKey]",
+                                "attributes": {
+                                    "exp": "[parameters('secretExpirationDateUnixTime')]"
+                                }
+                            }
+                        },
+                        {
+                            "name": "grant-access",
                             "type": "Microsoft.Resources/deployments",
                             "apiVersion": "2019-10-01",
                             "subscriptionId": "[subscription().subscriptionId]",
@@ -140,26 +159,8 @@
                                     ]
                                 }
                             }
-                        },
-                        {
-                            "type": "Microsoft.KeyVault/vaults/secrets",
-                            "apiVersion": "2019-09-01",
-                            "condition": "[parameters('deploySecretWithStorageAccountKeyToKeyVault')]",
-                            "name": "[concat(parameters('keyVaultName'), '/', parameters('secretName'))]",
-                            "location": "[resourceGroup().location]",
-                            "dependsOn": [],
-                            "tags": {
-                                "ValidityPeriodDays":"[parameters('secretValidityPeriodDays')]",
-                                "CredentialId":"key1",
-                                "ProviderAddress":"[variables('ProviderResourceId')]"
-                            },
-                            "properties": {
-                                "value": "[listKeys(variables('ProviderResourceId'), '2020-06-01').primaryKey]",
-                                "attributes": {
-                                    "exp": "[parameters('secretExpirationDateUnixTime')]"
-                                }
-                            }
                         }
+                       
                     ]
                 }
             }
