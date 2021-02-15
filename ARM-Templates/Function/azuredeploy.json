@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-          "RedisRG": {
+        "RedisRG": {
             "defaultValue": "[resourceGroup().name]",
             "type": "String",
             "metadata": {
@@ -55,18 +55,32 @@
                 "description": "The name of the secret where Redis keys are stored."
             }
         },
-        "repoURL": {
-            "defaultValue": "https://github.com/Azure/KeyVault-Secrets-Rotation-Redis-PowerShell.git",
-            "type": "String",
+        "deploySecretWithStorageAccountKeyToKeyVault": {
+            "defaultValue": "true",
+            "type": "bool",
             "metadata": {
-                "description": "The URL for the GitHub repository that contains the project to deploy."
+                "description": "Add StorageAccount key to key vault. New secret is created with key as value"
+            }
+        },
+        "secretExpirationDateUnixTime": {
+            "type": "int",
+            "metadata": {
+                "description": "Expiry date in seconds since 1970-01-01T00:00:00Z."
+            }
+        },
+		"secretValidityPeriodDays": {
+            "defaultValue": 90,
+            "type": "int",
+            "metadata": {
+                "description": "Secret validity period days. It is used to calculate expiration date for a secret after rotation"
             }
         }
     },
     "variables": {
         "functionStorageAccountName": "[concat(uniquestring(parameters('functionAppName')), 'fnappstrg')]",
         "eventSubscriptionName": "[concat(parameters('functionAppName'),'-',parameters('secretName'))]",
-        "appServiceSKU":"[if(equals(parameters('appServicePlanType'),'Consumption Plan'),'Y1','P1V2')]"
+        "appServiceSKU":"[if(equals(parameters('appServicePlanType'),'Consumption Plan'),'Y1','P1V2')]",
+        "ProviderResourceId":"[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('RedisRG'),'/providers/Microsoft.Cache/Redis/',parameters('RedisName'))]"
     },
     "resources": [
         {
@@ -151,7 +165,7 @@
                         "[resourceId('Microsoft.Web/Sites', parameters('functionAppName'))]"
                     ],
                     "properties": {
-                        "RepoUrl": "[parameters('repoURL')]",
+                        "RepoUrl": "https://github.com/Azure/KeyVault-Secrets-Rotation-Redis-PowerShell.git",
                         "branch": "main",
                         "IsManualIntegration": true
                     }
@@ -172,7 +186,7 @@
             }
         },
         {
-            "name": "kv-event-subscription-and-grant-access",
+            "name": "kv-event-subscription-and-grant-access-and-secret-deployment",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "subscriptionId": "[subscription().subscriptionId]",
@@ -226,6 +240,25 @@
                                     "subjectEndsWith": "[parameters('secretName')]",
                                     "includedEventTypes": [ "Microsoft.KeyVault.SecretNearExpiry" ]
 
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "apiVersion": "2019-09-01",
+                            "condition": "[parameters('deploySecretWithStorageAccountKeyToKeyVault')]",
+                            "name": "[concat(parameters('keyVaultName'), '/', parameters('secretName'))]",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [],
+                            "tags": {
+                                "ValidityPeriodDays":"[parameters('secretValidityPeriodDays')]",
+                                "CredentialId":"key1",
+                                "ProviderAddress":"[variables('ProviderResourceId')]"
+                            },
+                            "properties": {
+                                "value": "[listKeys(variables('ProviderResourceId'), '2019-04-01').keys[0].value]",
+                                "attributes": {
+                                    "exp": "[parameters('secretExpirationDateUnixTime')]"
                                 }
                             }
                         }
