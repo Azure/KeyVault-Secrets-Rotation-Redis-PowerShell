@@ -19,7 +19,7 @@ This project framework provides the following features:
 Functions require following information stored in secret as tags:
 
 * $secret.Tags["ValidityPeriodDays"] - number of days, it defines expiration date for new secret
-* $secret.Tags["CredentialId"] - Redis credential id
+* $secret.Tags["CredentialId"] - Redis credential id (Primary, Secondary)
 * $secret.Tags["ProviderAddress"] - Redis Resource Id
 
 You can create new secret with above tags and Redis key as value or add those tags to existing secret with Redis key. For automated rotation expiry date will also be required - key vault triggers 'SecretNearExpiry' event 30 days before expiry.
@@ -29,7 +29,7 @@ There are two available functions performing same rotation:
 * AKVRedisRotation - event triggered function, performs Redis key rotation triggered by Key Vault events. In this setup Near Expiry event is used which is published 30 days before expiration
 * AKVRedisRotationHttp - on-demand function with KeyVaultName and Secret name as parameters
 
-Functions are using Function App identity to access Key Vault and existing secret "CredentialId" tag with Redis key id (key1/key2) and "ProviderAddress" with Redis Resource Id.
+Functions are using Function App identity to access Key Vault and existing secret "CredentialId" tag with Redis key id (Primary/Secondary) and "ProviderAddress" with Redis Resource Id.
 
 ### Installation
 

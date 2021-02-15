@@ -252,7 +252,7 @@
                             "dependsOn": [],
                             "tags": {
                                 "ValidityPeriodDays":"[parameters('secretValidityPeriodDays')]",
-                                "CredentialId":"key1",
+                                "CredentialId":"Primary",
                                 "ProviderAddress":"[variables('ProviderResourceId')]"
                             },
                             "properties": {

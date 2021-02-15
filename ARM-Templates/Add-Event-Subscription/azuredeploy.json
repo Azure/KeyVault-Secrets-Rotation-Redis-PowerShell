@@ -44,11 +44,11 @@
                 "description": "The name of the secret where Redis keys are stored."
             }
         },
-         "deploySecretWithStorageAccountKeyToKeyVault": {
+         "deploySecretWithRedisKeyToKeyVault": {
             "defaultValue": "true",
             "type": "bool",
             "metadata": {
-                "description": "Add StorageAccount key to key vault. New secret is created with key as value"
+                "description": "Add Redis key to key vault. New secret is created with key as value"
             }
         },
         "secretExpirationDateUnixTime": {
@@ -114,13 +114,13 @@
                         {
                             "type": "Microsoft.KeyVault/vaults/secrets",
                             "apiVersion": "2019-09-01",
-                            "condition": "[parameters('deploySecretWithStorageAccountKeyToKeyVault')]",
+                            "condition": "[parameters('deploySecretWithRedisKeyToKeyVault')]",
                             "name": "[concat(parameters('keyVaultName'), '/', parameters('secretName'))]",
                             "location": "[resourceGroup().location]",
                             "dependsOn": [],
                             "tags": {
                                 "ValidityPeriodDays":"[parameters('secretValidityPeriodDays')]",
-                                "CredentialId":"key1",
+                                "CredentialId":"Primary",
                                 "ProviderAddress":"[variables('ProviderResourceId')]"
                             },
                             "properties": {
